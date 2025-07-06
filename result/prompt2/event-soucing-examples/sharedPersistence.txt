@@ -1,0 +1,59 @@
+Analyzed services with Architectural smell:
+- accounts-view-service
+- customers-view-service
+- api-gateway-service
+
+################################################################################
+Snippet from file: /event-sourcing-examples/java-spring/docker-compose-common.yml
+```
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+
+```
+Explanation:
+The `accountsviewservice`, `customersviewservice`, and `apigateway` services all use the same MongoDB URI (`mongodb://mongodb/mydb`). This means they are all connected to the same MongoDB database, violating the principle of decentralized data ownership in microservices. Each service should ideally have its own separate database.
+
+Refactoring Suggestions:
+1. Create separate MongoDB databases for each service.  For example:
+    - `mongodb://mongodb/accountsviewdb` for `accountsviewservice`
+    - `mongodb://mongodb/customersviewdb` for `customersviewservice`
+    - `mongodb://mongodb/apigatewaydb` for `apigateway` (if it truly needs persistence).
+2. Update the `SPRING_DATA_MONGODB_URI` environment variable for each service to point to its dedicated database.  This change needs to be reflected in the `docker-compose-common.yml` file and any other relevant configuration files.
+
+################################################################################
+Snippet from file: /event-sourcing-examples/java-spring/docker-compose.yml
+```
+  links:
+    - mongodb
+
+```
+Explanation: Both `accountsviewservice` and `customersviewservice` link to the same `mongodb` service, indicating shared persistence.
+
+Refactoring Suggestions: See the refactoring suggestions for the previous snippet.  The solution involves creating separate MongoDB instances and linking each view service to its dedicated database instance.
+
+
+################################################################################
+/event-sourcing-examples/java-spring/docker-compose.yml
+```
+  links:
+    - mongodb
+
+```
+Explanation: This further reinforces that `customersviewservice` is using the shared `mongodb` service.
+
+Refactoring Suggestions:  See the refactoring suggestions for the previous snippets.  The solution involves creating separate MongoDB instances and linking each view service to its dedicated database instance.
+
+################################################################################
+/event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml
+```
+  links:
+    - mongodb
+
+```
+Explanation: Even in the local Eventuate setup, `accountsviewservice`, `customersviewservice`, and `apigateway` are linked to the same `mongodb` service.
+
+Refactoring Suggestions:  While using a single database might be acceptable in a local development environment for simplicity, it's crucial to maintain the separation of databases in different environments like testing and production.  Consider using different database names even in the local setup to mimic the ideal architecture.  For example, use different database names in the `SPRING_DATA_MONGODB_URI` environment variable for each service, even when pointing to the same MongoDB instance.
+
+--- Evaluation ---
+Precision: 0.67, Recall: 1.00, F1: 0.80
+
+

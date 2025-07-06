@@ -1,0 +1,142 @@
+--- LLM Response ---
+ANALYSIS RESULT FOR: shared persistence
+
+Analyzed services with Architectural smell:
+- accountsviewservice
+- cdcservice
+- customersviewservice
+- transactionsservice
+- customersservice
+- accounts-service
+
+
+/event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml:
+```yaml
+transactionsservice:
+  extends:
+    file: docker-compose-common.yml
+    service: transactionsservice
+  links:
+    - mysql
+    - kafka
+    - zookeeper
+  environment:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+```
+Explanation: The `transactionsservice` uses the same MySQL database (`eventuate`) as other services. This is indicated by the `SPRING_DATASOURCE_URL` environment variable.
+
+/event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml:
+```yaml
+customersviewservice:
+  extends:
+    file: docker-compose-common.yml
+    service: customersviewservice
+  links:
+    - mongodb
+    - mysql
+    - kafka
+    - zookeeper
+  environment:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+  environment:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+```
+Explanation: The `customersviewservice` also uses the same MySQL database (`eventuate`) as other services, as indicated by the `SPRING_DATASOURCE_URL` environment variable.  It also uses MongoDB.
+
+/event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml:
+```yaml
+accountsviewservice:
+  extends:
+    file: docker-compose-common.yml
+    service: accountsviewservice
+  links:
+    - mongodb
+    - mysql
+    - kafka
+    - zookeeper
+  environment:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+```
+Explanation: The `accountsviewservice` uses the same MySQL database (`eventuate`) as other services, sharing the same `SPRING_DATASOURCE_URL`. It also uses MongoDB.
+
+/event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml:
+```yaml
+cdcservice:
+  image: eventuateio/eventuateio-local-cdc-service:0.9.0
+  ports:
+    - "8099:8080"
+  links:
+    - mysql
+    - kafka
+    - zookeeper
+  environment:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+```
+Explanation: The `cdcservice` uses the same MySQL database (`eventuate`) configuration as other services, evidenced by the identical `SPRING_DATASOURCE_URL`.
+
+/event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml:
+```yaml
+customersservice:
+  extends:
+    file: docker-compose-common.yml
+    service: customersservice
+  links:
+    - mysql
+    - kafka
+    - zookeeper
+  environment:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+```
+Explanation: The `customersservice` uses the same MySQL database (`eventuate`) as other services, as indicated by the `SPRING_DATASOURCE_URL` environment variable.
+
+
+/event-sourcing-examples/java-spring/set-env.sh:
+```bash
+export SPRING_DATASOURCE_URL=jdbc:mysql://${DOCKER_HOST_IP}/eventuate
+export SPRING_DATASOURCE_USERNAME=mysqluser
+export SPRING_DATASOURCE_PASSWORD=mysqlpw
+export SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.jdbc.Driver
+
+```
+Explanation: This script sets environment variables for database connection, indicating that multiple services might use the same MySQL database named `eventuate`. This reinforces the shared persistence smell across services.
+
+--- Evaluation ---
+Precision: 0.00, Recall: 0.00, F1: 0.00
+

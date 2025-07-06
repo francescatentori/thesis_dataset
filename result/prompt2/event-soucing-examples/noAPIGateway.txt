@@ -1,0 +1,72 @@
+--- LLM Response ---
+ANALYSIS RESULT FOR: no api gateway
+
+Analyzed services with Architectural smell: []
+
+################################################################################
+# /event-sourcing-examples/java-spring/accounts-service/src/main/java/net/chrisrichardson/eventstore/javaexamples/banking/accountsservice/web/AccountController.java
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/accounts-service/src/main/java/net/chrisrichardson/eventstore/javaexamples/banking/accountsservice/web/AccountController.java
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/accounts-service/src/main/java/net/chrisrichardson/eventstore/javaexamples/banking/accountsservice/backend/AccountsBackendConfiguration.java
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/accounts-service/src/main/java/net/chrisrichardson/eventstore/javaexamples/banking/accountsservice/backend/AccountService.java
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/accounts-service/src/main/java/net/chrisrichardson/eventstore/javaexamples/banking/accountsservice/AccountsServiceMain.java
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/build-and-test-all-eventuate-local.sh
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/docker-compose-eventuate-local.yml
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/handy-curl-commands.sh
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+################################################################################
+# /event-sourcing-examples/java-spring/handy-curl-commands.sh
+################################################################################
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+--- Evaluation ---
+Precision: 1.00, Recall: 1.00, F1: 1.00

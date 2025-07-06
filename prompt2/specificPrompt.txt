@@ -1,0 +1,38 @@
+"no api gateway": """
+Your task is to determine if the 'No API Gateway' smell is present. A project has this smell if multiple microservices are exposed directly to the outside world, instead of routing traffic through a single entry point.
+Analyze the provided context, which may contain:
+    1. The content of orchestration files like `docker-compose.yml`.
+    2. A list of services and the ports they expose, extracted from `application.properties` or `.yml` files.
+    3. The names of the service folders.
+
+Follow these rules:
+    1.  **Gateway by Name**: If the context shows a service named 'api-gateway', 'gateway-service', or similar, it's highly likely that the smell is NOT present.
+    2.  **Multiple Exposed Ports**: If the context shows that **more than one** service exposes a port (e.g., via `server.port` or docker `ports:`), and NONE of them is clearly a gateway, then the smell **IS PRESENT**.
+    3.  **Single Exposed Port**: If only one service exposes a port, it is acting as the de-facto gateway, so the smell is NOT present.
+    4.  **No Information**: If the context explicitly states that no configuration files were found to determine the architecture, you must report that the smell IS LIKELY PRESENT by default, as there's no evidence of a gateway.
+
+Based on your analysis, list the names of all services that are exposed directly, which constitute the smell. If the smell is not present, return an empty list `[]`.
+""",
+
+"shared persistence": """
+Your task is to identify the 'Shared Persistence' smell. This smell occurs when multiple microservices directly access the same physical database instance or schema, creating tight coupling. """  ,
+
+"endpoint based service interaction": """Your task is to identify services that are called using static, hardcoded endpoints, which is a sign of tight coupling. The evidence for this smell is often found in API Gateway configuration files, but the smell itself belongs to the services being called, not the gateway.
+Follow these steps precisely:
+    1.   **Analyze Configuration Files**: Your primary target is configuration files (`.properties`, `.yml`) that define routing rules. Pay close attention to files within services named `api-gateway` or similar.
+    2.   **Identify Static Endpoint Definitions**: Look for lines that map a path to a static service location. In `.properties` files, this is the key piece of evidence:
+        `api.gateway.endpoints[...].location=http://${some.service.host}:port`
+    3.   **CRITICAL RULE - Attribute the Smell Correctly**: When you find a line like the one above, the service exhibiting the smell is **NOT** the one containing the configuration file (the gateway). The smell belongs to the service being pointed to.
+        -   **Example**: If you see `api.gateway.endpoints[...].location=http://${transfers.commandside.service.host}:8080`, you must report **`transactions-service`** as having the smell.
+        -   **Example**: If you see `api.gateway.endpoints[...].location=http://${accounts.queryside.service.host}:8080`, you must report **`accounts-view-service`** as having the smell.
+    4.   **Extract Service Names**: Your goal is to extract the target service names from these configuration lines. The service name is usually part of the placeholder variable (e.g., `accounts.commandside.service.host` implies `accounts-service`). Generalize this pattern.
+    5.   **Analyze Source Code (Secondary Evidence)**: As a secondary step, look for direct HTTP calls in the source code of non-gateway services (e.g., using `RestTemplate`, `HttpClient`). If `service-A` calls `http://service-B:8080`, then `service-A` is also tightly coupled. However, for the project you are analyzing, the gateway's `application.properties` is the most important evidence.
+    6.   **Final Reporting**: List all the service names you extracted from the routing configurations. **DO NOT list `api-gateway-service` in the final output for this specific smell.**
+    Your final list should contain the names of the downstream services that are being called via static URLs.
+    """,
+
+"wobbly service interaction": """
+Your analysis for this specific smell MUST focus on identifying inefficient and "chatty" communication patterns where a service makes multiple synchronous calls to another single service to complete one task. Look for:
+    a. **Calls Inside Loops**: This is the strongest indicator. Search for code where an HTTP client (like `RestTemplate`, `WebClient`, `FeignClient`) is invoked REPEATEDLY inside a `for`, `while`, or `stream().forEach()` loop. For example, getting a list of IDs and then calling another service for each single ID in the list.
+    b. **Sequential Calls to the Same Service**: Look for methods that make multiple, separate calls to the same remote service to gather different pieces of data about the same entity. For example, `product = productService.getProduct(id)`, then `stock = productService.getStock(id)`, then `reviews = productService.getReviews(id)`. This indicates the remote API is not coarse-grained enough.
+    c. **Complex Data Aggregation**: Identify client-side logic that exists only to stitch together the results of multiple small calls from another service. This logic is a symptom of the wobbly interaction."""

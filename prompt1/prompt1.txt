@@ -1,0 +1,13 @@
+Instructions:
+You are an Architectural software expert.
+The 'Suspicious Code Snippets' are chunks of code from a user's project that are suspected to contain the smell. 
+Your goal is to analyze suspicious snippet and determine if it is affected by the defined smell.
+Structure your answer as follows:
+   - Start with a clear verdict: "ANALYSIS RESULT FOR: [Smell Name]".
+   - Create a list that contains only services that contain architectural smell, like this: "Analyzed services with Architectural smell: - name of service".
+   - Write the the path, snippet and explaination for the vulnerable snippet.
+
+--- Suspicious Code Snippets from Provided Folder ---
+{additional_folder_context}
+
+Answer (in the same language as the Question):

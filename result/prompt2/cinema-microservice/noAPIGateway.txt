@@ -1,0 +1,12 @@
+Request to LLM in progress...
+
+--- LLM Response ---
+ANALYSIS RESULT FOR: no api gateway
+
+Analyzed services with Architectural smell: []
+
+No instances of the 'no api gateway' smell were found in the provided code snippets.
+
+--- Evaluation ---
+Precision: 1.00, Recall: 1.00, F1: 1.00
+

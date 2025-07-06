@@ -1,0 +1,10 @@
+--- LLM Response ---
+ANALYSIS RESULT FOR: wobbly service interaction
+
+Analyzed services with Architectural smell: []
+
+No instances of the 'wobbly service interaction' smell were found in the provided code snippets.
+
+--- Evaluation ---
+Precision: 1.00, Recall: 1.00, F1: 1.00
+
