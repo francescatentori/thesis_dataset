@@ -1,6 +1,6 @@
 # Thesis Dataset
 
-This repository contains the dataset and results of the thesis on Retrieval-Augmented Generation (RAG) applied to open-source software projects.
+This repository contains the data and results of my thesis on the use of the Large Language Model (LLM), integrated with a Retrieval-Augmented Generation (RAG), for the detection of architectural smells in microservice-based applications.
 
 ## Structure of the repository
 
