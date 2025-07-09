@@ -1,24 +1,26 @@
-"no api gateway": """
-Your task is to determine if the 'No API Gateway' smell is present. A project has this smell if multiple microservices are exposed directly to the outside world, instead of routing traffic through a single entry point.
-Analyze the provided context, which may contain:
+#SPECIFIC PROMPT
+
+SMELL_INSTRUCTIONS = {
+    "no api gateway": """
+    Your task is to determine if the 'No API Gateway' smell is present. A project has this smell if multiple microservices are exposed directly to the outside world, instead of routing traffic through a single entry point.
+    Analyze the provided context, which may contain:
     1. The content of orchestration files like `docker-compose.yml`.
     2. A list of services and the ports they expose, extracted from `application.properties` or `.yml` files.
     3. The names of the service folders.
 
-Follow these rules:
+    Follow these rules:
     1.  **Gateway by Name**: If the context shows a service named 'api-gateway', 'gateway-service', or similar, it's highly likely that the smell is NOT present.
     2.  **Multiple Exposed Ports**: If the context shows that **more than one** service exposes a port (e.g., via `server.port` or docker `ports:`), and NONE of them is clearly a gateway, then the smell **IS PRESENT**.
     3.  **Single Exposed Port**: If only one service exposes a port, it is acting as the de-facto gateway, so the smell is NOT present.
     4.  **No Information**: If the context explicitly states that no configuration files were found to determine the architecture, you must report that the smell IS LIKELY PRESENT by default, as there's no evidence of a gateway.
 
-Based on your analysis, list the names of all services that are exposed directly, which constitute the smell. If the smell is not present, return an empty list `[]`.
-""",
+    Based on your analysis, list the names of all services that are exposed directly, which constitute the smell. If the smell is not present, return an empty list `[]`.
+    """,
 
-"shared persistence": """
-Your task is to identify the 'Shared Persistence' smell. This smell occurs when multiple microservices directly access the same physical database instance or schema, creating tight coupling. """  ,
+    "shared persistence": """Your task is to identify the 'Shared Persistence' smell. This smell occurs when multiple microservices directly access the same physical database instance or schema, creating tight coupling. """  ,
 
-"endpoint based service interaction": """Your task is to identify services that are called using static, hardcoded endpoints, which is a sign of tight coupling. The evidence for this smell is often found in API Gateway configuration files, but the smell itself belongs to the services being called, not the gateway.
-Follow these steps precisely:
+    "endpoint based service interaction": """Your task is to identify services that are called using static, hardcoded endpoints, which is a sign of tight coupling. The evidence for this smell is often found in API Gateway configuration files, but the smell itself belongs to the services being called, not the gateway.
+    Follow these steps precisely:
     1.   **Analyze Configuration Files**: Your primary target is configuration files (`.properties`, `.yml`) that define routing rules. Pay close attention to files within services named `api-gateway` or similar.
     2.   **Identify Static Endpoint Definitions**: Look for lines that map a path to a static service location. In `.properties` files, this is the key piece of evidence:
         `api.gateway.endpoints[...].location=http://${some.service.host}:port`
@@ -31,8 +33,48 @@ Follow these steps precisely:
     Your final list should contain the names of the downstream services that are being called via static URLs.
     """,
 
-"wobbly service interaction": """
-Your analysis for this specific smell MUST focus on identifying inefficient and "chatty" communication patterns where a service makes multiple synchronous calls to another single service to complete one task. Look for:
+    "wobbly service interaction": """Your analysis for this specific smell MUST focus on identifying inefficient and "chatty" communication patterns where a service makes multiple synchronous calls to another single service to complete one task. Look for:
     a. **Calls Inside Loops**: This is the strongest indicator. Search for code where an HTTP client (like `RestTemplate`, `WebClient`, `FeignClient`) is invoked REPEATEDLY inside a `for`, `while`, or `stream().forEach()` loop. For example, getting a list of IDs and then calling another service for each single ID in the list.
     b. **Sequential Calls to the Same Service**: Look for methods that make multiple, separate calls to the same remote service to gather different pieces of data about the same entity. For example, `product = productService.getProduct(id)`, then `stock = productService.getStock(id)`, then `reviews = productService.getReviews(id)`. This indicates the remote API is not coarse-grained enough.
     c. **Complex Data Aggregation**: Identify client-side logic that exists only to stitch together the results of multiple small calls from another service. This logic is a symptom of the wobbly interaction."""
+}
+
+
+#GENERIC PROMPT
+
+prompt_template_str = """Instructions:
+1. You are an Architectural software expert. Your task is to analyze specific code snippets for a given Architectural smell.
+2. The 'Smell Definition' provides the official description.
+3. The 'Positive Examples' are code snippets that represent good practices and do NOT manifest the smell.
+4. The 'Suspicious Code Snippets' are chunks of code from a user's project that are suspected to contain the smell.
+5. Your primary goal is to analyze EACH suspicious snippet and determine if it is affected by the defined smell, using positive examples for comparison.
+6. Structure your answer as follows:
+   - Start with a clear verdict: "ANALYSIS RESULT FOR: [Smell Name]".
+   - List the services that contain at least one confirmed instance of this smell. Format:
+    "Analyzed services with Architectural smell:
+    - service-name-1
+    - service-name-2"
+    If no services are affected, return:
+    "Analyzed services with Architectural smell: []"
+   - For each analyzed file path, create a section, divided by a line of #.
+   - Under each file path, list the snippets that ARE AFFECTED BY THE SMELL.
+   - For each affected snippet, provide:
+     a. The line of code or block that contains the smell.
+     b. A clear explanation of WHY it is an Architectural smell in this context.
+     c. Offer actionable suggestions on how to refactor the code toresolve the architectural smell.
+   - If a snippet is NOT affected by the smell, you don't need to mention it.
+   - If, after analyzing all provided snippets, you find NO instances of the smell, state clearly: "No instances of the '[Smell Name]' smell were found in the provided code snippets."
+
+--- Smell Definition ---
+{smell_definition}
+
+--- Smell-specific detection instructions ---
+{smell_specific_instructions}
+
+--- Positive Examples (without smell) ---
+{positive_examples}
+
+--- Suspicious Code Snippets from Provided Folder ---
+{additional_folder_context}
+
+Answer (in the same language as the Question):"""

@@ -255,7 +255,7 @@ SMELL_INSTRUCTIONS = {
 
 prompt_template_str = """Instructions:
 1. You are an Architectural software expert. Your task is to analyze specific code snippets for a given Architectural smell.
-2. The 'Smell Definition' provides the official description and remediation strategies for the Architectural smell.
+2. The 'Smell Definition' provides the official description.
 3. The 'Positive Examples' are code snippets that represent good practices and do NOT manifest the smell.
 4. The 'Suspicious Code Snippets' are chunks of code from a user's project that are suspected to contain the smell.
 5. Your primary goal is to analyze EACH suspicious snippet and determine if it is affected by the defined smell, using positive examples for comparison.

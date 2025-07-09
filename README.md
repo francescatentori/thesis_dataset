@@ -4,14 +4,16 @@ This repository contains the data and results of my thesis on the use of the Lar
 
 ## Structure of the repository
 
-- **prompt 1/**: It contains the first prompt used to query the model and, for each project, the RAG system codes and knowledge base.
+- **knowledge/**: It contains the knowledge used by the RAG.
 
-- **prompt 2/**: It contains the second prompt used to query the model and, for each project, the RAG system codes and knowledge base.
+- **prompt1/**: It contains the first prompt used to query the model and, for each project, the RAG system codes.
+
+- **prompt2/**: It contains the second prompt used to query the model and, for each project, the RAG system codes.
 
 - **result/**: It contains the results obtained from the interaction between the LLM model and each project. Inside:
 
-  - **prompt 1/**: For each project, there are the results generated with prompt 1.
-  - **prompt 2/**: For each project, there are the results generated with prompt 2.
+  - **resultPrompt1/**: For each project, there are the results generated with prompt 1.
+  - **resultPrompt2/**: For each project, there are the results generated with prompt 2.
 
 ## Analysed projects
 
