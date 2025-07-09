@@ -142,10 +142,5 @@
       "positive_example": "services:\n  api-gateway:\n    image: my-gateway\n    ports:\n      - \"8080:8080\" # <-- CORRECT\n\n  order-service:\n    image: my-orders\n    # No 'ports' section, so it is not exposed.\n\n  product-service:\n    image: my-products\n    # No 'ports' section.",
       "explanation": "This is a correct deployment configuration that enforces the API Gateway pattern. Only the gateway service exposes a port to the outside world. All other services are internal and can only be reached through the gateway, ensuring that all cross-cutting concerns are applied uniformly."
     }
-],
-  "meta_data": {
-    "tags": ["api-gateway", "routing", "security", "client-coupling", "cross-cutting-concerns"],
-    "remediation_difficulty": "High",
-    "impact": "high"
-  }
+]
 }

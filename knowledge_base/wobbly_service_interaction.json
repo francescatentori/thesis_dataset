@@ -130,10 +130,5 @@
       "positive_example": "```scala\nval future = (customerService ? RequestData).mapTo[Customer]\nval withRecovery = future.recover { case _ => defaultCustomer }\n```",
       "explanation": "Uses Future.recover in Scala to provide a default value if the asynchronous call fails, preventing propagation of the failure."
     }
-  ],
-   "meta_data": {
-    "tags": ["wobbly-interaction", "error-handling", "resilience", "fault-tolerance", "cascading-failure", "timeout", "retry", "circuit-breaker", "fallback"],
-    "remediation_difficulty": "High",
-    "impact": "Critical"
-  }
+  ]
 }

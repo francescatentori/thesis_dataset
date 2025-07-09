@@ -137,10 +137,5 @@
       "positive_example": "The architectural diagram shows Customers Service, Accounts Service, Transactions Service, Customers View Service, and Accounts View Service as distinct components, each with their own responsibilities and implicit data ownership.",
       "explanation": "The high-level architectural decomposition into distinct services with clear responsibilities inherently promotes decentralized data management by defining independent boundaries for data ownership. [5, 6]"
     }
-  ],
-  "metadata": {
-    "tags": ["shared-database", "data-coupling", "schema-sharing", "database-integration"],
-    "remediation_difficulty": "High",
-    "impact": "High"
-  }
+  ]
 }

@@ -134,11 +134,5 @@
       "positive_example": "class AuthService(client: HttpClient) {\n  def login(credentials: Credentials) = {\n    // Using SRV DNS to find the service\n    val response = client.get(\"http://auth-service/auth/login\")\n    response\n  }\n}",
       "explanation": "This Scala service uses the name 'auth-service' for the URI. In many systems, SRV DNS records or service discovery resolve this to active instances of the AuthService. It avoids binding to one endpoint."
     }
-  ],
-  "meta_data": {
-    "tags": [
-        "scalability", "resilience", "performance", "coupling", "availability"],
-    "remediation_difficulty": "Medium",
-    "impact": "Medium"
-  }
+  ]
 }
